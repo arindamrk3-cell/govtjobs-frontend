@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "job-app",
+    "slug": "job-app",
+    "version": "1.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "aa07a131-0d47-418a-9046-2c624450ee3d"
+      }
+    }
+  }
+}
