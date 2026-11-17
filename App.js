@@ -393,7 +393,7 @@ export default function App() {
         {screen !== "login" && screen !== "detail" &&
           screen !== "onboarding" && screen !== "register" &&
           screen !== "tracker" && screen !== "updates" &&
-          screen !== "calendar" && (
+          screen !== "calendar" && screen !== "save-note" && screen !== "category" && screen !== "add-note" && screen !=="forgotPassword" (
             <SafeAreaView edges={["bottom"]} style={{ backgroundColor: "#0D1F1A" }}>
               <BottomNav screen={screen} setScreen={setScreen} />
             </SafeAreaView>
