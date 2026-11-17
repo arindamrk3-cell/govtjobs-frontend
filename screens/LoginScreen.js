@@ -154,17 +154,17 @@ export default function LoginScreen({ setScreen, setToken, getPushToken, onLogin
         </TouchableOpacity>
 
         {/* Divider */}
-        <View style={styles.dividerRow}>
+        {/* <View style={styles.dividerRow}>
           <View style={styles.dividerLine} />
           <Text style={styles.dividerText}>or</Text>
           <View style={styles.dividerLine} />
-        </View>
+        </View> */}
 
         {/* Google */}
-        <TouchableOpacity style={styles.googleBtn}>
+        {/* <TouchableOpacity style={styles.googleBtn}>
           <Ionicons name="logo-google" size={16} color="#444" />
           <Text style={styles.googleText}>Continue with Google</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {/* Footer */}
