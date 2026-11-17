@@ -169,8 +169,7 @@ export default function ChatModal({ token, onClose }) {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.modalContainer}
-      >
+        style={styles.modalContainer}>
         <View style={styles.chatModal}>
           {/* Header */}
           <View style={styles.header}>

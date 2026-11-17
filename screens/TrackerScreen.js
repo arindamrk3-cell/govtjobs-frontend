@@ -2,27 +2,27 @@ import React, { useEffect, useState } from "react";
 import {
   View, Text, ScrollView, TouchableOpacity,
   StyleSheet, SafeAreaView, ActivityIndicator,
-  TextInput, Modal, Linking,Alert
+  TextInput, Modal, Linking, Alert,Platform
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import API from "../services/api";
 
 const C = {
-  bg:           "#0D1F1A",
-  surface:      "#FFFFFF",
-  surfaceAlt:   "#F4F7F5",
-  primary:      "#0A8C5F",
-  primaryDark:  "#076647",
+  bg: "#0D1F1A",
+  surface: "#FFFFFF",
+  surfaceAlt: "#F4F7F5",
+  primary: "#0A8C5F",
+  primaryDark: "#076647",
   primaryMuted: "#E6F4EF",
-  stateTag:     "#EAF1FB",
-  stateBorder:  "#A8C4E8",
-  text:         "#0D1F1A",
-  textMid:      "#4A6360",
-  textLight:    "#8FA8A2",
-  border:       "#DDE8E4",
-  danger:       "#C0392B",
-  white:        "#FFFFFF",
+  stateTag: "#EAF1FB",
+  stateBorder: "#A8C4E8",
+  text: "#0D1F1A",
+  textMid: "#4A6360",
+  textLight: "#8FA8A2",
+  border: "#DDE8E4",
+  danger: "#C0392B",
+  white: "#FFFFFF",
 };
 
 const STATUS_CONFIG = {
@@ -112,17 +112,17 @@ export default function TrackerScreen({ token, setScreen, setSelectedJob }) {
     }
   };
   // Add removeFromTracker function:
-const removeFromTracker = async (jobId) => {
-  try {
-    await API.delete(`/jobs/apply/${jobId}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    // Remove from local state instantly
-    setEntries(prev => prev.filter(e => e.jobId?._id !== jobId));
-  } catch (err) {
-    console.log(err);
-  }
-};
+  const removeFromTracker = async (jobId) => {
+    try {
+      await API.delete(`/jobs/apply/${jobId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      // Remove from local state instantly
+      setEntries(prev => prev.filter(e => e.jobId?._id !== jobId));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const filtered = filterStatus === "All"
     ? entries
@@ -130,10 +130,10 @@ const removeFromTracker = async (jobId) => {
 
   // Stats
   const stats = {
-    total:       entries.length,
-    applied:     entries.filter(e => e.status === "Applied").length,
+    total: entries.length,
+    applied: entries.filter(e => e.status === "Applied").length,
     shortlisted: entries.filter(e => e.status === "Shortlisted").length,
-    rejected:    entries.filter(e => e.status === "Rejected").length,
+    rejected: entries.filter(e => e.status === "Rejected").length,
   };
 
   return (
@@ -302,7 +302,7 @@ const removeFromTracker = async (jobId) => {
                       <Ionicons name="open-outline" size={14} color={C.primary} />
                       <Text style={styles.actionBtnText}>Apply Link</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
     style={[styles.actionBtn, { borderColor: "#F5C6C0", backgroundColor: "#FFF0EE" }]}
     onPress={() => {
       Alert.alert(
@@ -320,7 +320,42 @@ const removeFromTracker = async (jobId) => {
   >
     <Ionicons name="trash-outline" size={14} color={C.danger} />
     <Text style={[styles.actionBtnText, { color: C.danger }]}>Remove</Text>
-  </TouchableOpacity>
+  </TouchableOpacity> */}
+
+                    <TouchableOpacity
+                      style={[
+                        styles.actionBtn,
+                        { borderColor: "#F5C6C0", backgroundColor: "#FFF0EE" },
+                      ]}
+                      onPress={() => {
+                        const confirmRemove = () => removeFromTracker(job._id);
+
+                        if (Platform.OS === "web") {
+                          if (window.confirm("Are you sure you want to remove this job from your tracker?")) {
+                            confirmRemove();
+                          }
+                        } else {
+                          Alert.alert(
+                            "Remove from Tracker",
+                            "Are you sure?",
+                            [
+                              { text: "Cancel", style: "cancel" },
+                              {
+                                text: "Remove",
+                                style: "destructive",
+                                onPress: confirmRemove,
+                              },
+                            ]
+                          );
+                        }
+                      }}
+                    >
+                      <Ionicons name="trash-outline" size={14} color={C.danger} />
+                      <Text style={[styles.actionBtnText, { color: C.danger }]}>
+                        Remove
+                      </Text>
+                    </TouchableOpacity>
+
                   </View>
 
                 </View>
@@ -377,8 +412,8 @@ const removeFromTracker = async (jobId) => {
 }
 
 const styles = StyleSheet.create({
-  container:     { flex: 1, backgroundColor: C.bg },
-  loader:        { flex: 1, justifyContent: "center", alignItems: "center" },
+  container: { flex: 1, backgroundColor: C.bg },
+  loader: { flex: 1, justifyContent: "center", alignItems: "center" },
   scrollContent: { padding: 14, paddingBottom: 40 },
 
   // ── Header ──────────────────────────────────────────────────────────────────
@@ -405,7 +440,7 @@ const styles = StyleSheet.create({
     shadowColor: "#000", shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.07, shadowRadius: 8, elevation: 3,
   },
-  statNum:   { fontSize: 22, fontWeight: "800", color: C.text },
+  statNum: { fontSize: 22, fontWeight: "800", color: C.text },
   statLabel: { fontSize: 10, fontWeight: "600", color: C.textMid, marginTop: 2, letterSpacing: 0.3 },
 
   // ── Filter ───────────────────────────────────────────────────────────────────
@@ -415,13 +450,13 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.07)",
     borderWidth: 1, borderColor: "rgba(255,255,255,0.10)",
   },
-  filterChipActive:     { backgroundColor: C.primaryMuted, borderColor: "rgba(10,140,95,0.30)" },
-  filterChipText:       { fontSize: 13, fontWeight: "600", color: "rgba(255,255,255,0.45)" },
+  filterChipActive: { backgroundColor: C.primaryMuted, borderColor: "rgba(10,140,95,0.30)" },
+  filterChipText: { fontSize: 13, fontWeight: "600", color: "rgba(255,255,255,0.45)" },
   filterChipTextActive: { color: C.primary },
 
   // ── Empty ────────────────────────────────────────────────────────────────────
-  emptyState:   { alignItems: "center", paddingTop: 60, gap: 10 },
-  emptyText:    { fontSize: 16, fontWeight: "700", color: "rgba(255,255,255,0.3)" },
+  emptyState: { alignItems: "center", paddingTop: 60, gap: 10 },
+  emptyText: { fontSize: 16, fontWeight: "700", color: "rgba(255,255,255,0.3)" },
   emptySubText: { fontSize: 13, color: "rgba(255,255,255,0.18)", textAlign: "center", paddingHorizontal: 30 },
 
   // ── Card ─────────────────────────────────────────────────────────────────────
@@ -431,15 +466,15 @@ const styles = StyleSheet.create({
     shadowColor: "#000", shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.10, shadowRadius: 16, elevation: 5,
   },
-  cardTop:    { flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 6 },
+  cardTop: { flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 6 },
   orgIcon: {
     width: 42, height: 42, borderRadius: 11, backgroundColor: C.primaryMuted,
     alignItems: "center", justifyContent: "center",
     borderWidth: 1, borderColor: "rgba(10,140,95,0.18)",
   },
-  orgText:   { color: C.primary, fontWeight: "700", fontSize: 13, letterSpacing: 0.5 },
+  orgText: { color: C.primary, fontWeight: "700", fontSize: 13, letterSpacing: 0.5 },
   cardTitle: { fontSize: 14, fontWeight: "700", color: C.text, lineHeight: 18 },
-  cardOrg:   { fontSize: 12, color: C.textMid, marginTop: 1, fontWeight: "500" },
+  cardOrg: { fontSize: 12, color: C.textMid, marginTop: 1, fontWeight: "500" },
 
   // ── Status Badge ─────────────────────────────────────────────────────────────
   statusBadge: {
@@ -493,7 +528,7 @@ const styles = StyleSheet.create({
     flexDirection: "row", justifyContent: "space-between",
     alignItems: "center", marginBottom: 6,
   },
-  modalTitle:    { fontSize: 18, fontWeight: "700", color: C.text },
+  modalTitle: { fontSize: 18, fontWeight: "700", color: C.text },
   modalJobTitle: { fontSize: 13, color: C.textMid, marginBottom: 16 },
   noteInput: {
     backgroundColor: C.surfaceAlt, borderRadius: 12,

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  //baseURL:"http://10.63.65.86:5000/api"
+  //baseURL:"http://10.49.208.69:5000/api"
   baseURL: "https://govtjobs-backend.onrender.com/api"
 });
 
