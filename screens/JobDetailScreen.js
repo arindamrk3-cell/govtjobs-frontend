@@ -101,7 +101,7 @@ export default function JobDetailScreen({ token, job, setScreen }) {
           `🚀 Apply Now:${job.link}\n\n` +
 
           `💼 Secure your future today!\n` +
-          `📲 GovtJobs App. Download the App now to get more opportunity.`
+          `📲 GovtJobs App. Download the App now to get more opportunity. To visit our website, go to https://govtjobs-xi.vercel.app/`
       });
     } catch (err) {
       console.log(err);
