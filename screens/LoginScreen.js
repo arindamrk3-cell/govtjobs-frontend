@@ -7,7 +7,7 @@ import {
 
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import ForgotPasswordScreen from "./ForgotPasswordScreen";
 import { View, TextInput, Button, Text } from "react-native";
 import API from "../services/api";
 
@@ -131,9 +131,14 @@ export default function LoginScreen({ setScreen, setToken, getPushToken, onLogin
         </View>
 
         {/* Forgot */}
-        <TouchableOpacity style={styles.forgotWrap}>
-          <Text style={styles.forgotText}>Forgot password?</Text>
-        </TouchableOpacity>
+        <TouchableOpacity
+  style={styles.forgotWrap}
+  onPress={() => setScreen("forgotPassword")}
+>
+  <Text style={styles.forgotText}>
+    Forgot password?
+  </Text>
+</TouchableOpacity>
         {/* Error Banner */}
         {error ? (
           <View style={styles.errorBanner}>

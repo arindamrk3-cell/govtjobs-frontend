@@ -6,6 +6,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoginScreen from "./screens/LoginScreen";
+import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
 import HomeScreen from "./screens/HomeScreen";
 import BookmarkScreen from "./screens/BookmarkScreen";
 import JobDetailScreen from "./screens/JobDetailScreen";
@@ -208,6 +209,9 @@ export default function App() {
         {screen === "login" && (
           <LoginScreen setScreen={setScreen} setToken={setToken} onLoginSuccess={onLoginSuccess} getPushToken={getPushToken} />
         )}
+        {screen === "forgotPassword" && (
+  <ForgotPasswordScreen setScreen={setScreen} />
+)}
         {screen === "register" && (
           <RegisterScreen
             setScreen={setScreen}
