@@ -39,6 +39,7 @@ export default function RegisterScreen({ setScreen, setTempEmail, setScreenToOTP
       setScreenToOTP?.();
     } catch (err) {
       const msg = err.response?.data?.msg || err.response?.data?.message;
+      console.log(msg);
       setError(msg || "Registration failed. Please try again.");
     } finally {
       setLoading(false);

@@ -123,25 +123,82 @@ export default function AdminScreen({ token, setScreen }) {
       console.log(err);
     }
   };
+  // const deleteUser = async (id) => {
+  //   Alert.alert("Delete User", "Are you sure you want to delete this user?", [
+  //     { text: "Cancel", style: "cancel" },
+  //     {
+  //       text: "Delete", style: "destructive",
+  //       onPress: async () => {
+  //         try {
+  //           await API.delete(`/admin/users/${id}`, {
+  //             headers: { Authorization: `Bearer ${token}` }
+  //           });
+  //           fetchUsers();
+  //           fetchStats();
+  //         } catch (err) {
+  //           console.log(err);
+  //         }
+  //       }
+  //     }
+  //   ]);
+  // };
   const deleteUser = async (id) => {
+  const performDelete = async () => {
+    try {
+      await API.delete(`/admin/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Refresh the user list and dashboard statistics
+      await fetchUsers();
+      await fetchStats();
+
+      if (Platform.OS === "web") {
+        window.alert("User deleted successfully!");
+      } else {
+        Alert.alert("Success", "User deleted successfully!");
+      }
+    } catch (err) {
+      console.error("Delete user error:", err.response?.data || err);
+
+      const message =
+        err.response?.data?.message || "Failed to delete user.";
+
+      if (Platform.OS === "web") {
+        window.alert(message);
+      } else {
+        Alert.alert("Error", message);
+      }
+    }
+  };
+
+  if (Platform.OS === "web") {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this user?"
+    );
+
+    if (confirmed) {
+      await performDelete();
+    }
+  } else {
     Alert.alert("Delete User", "Are you sure you want to delete this user?", [
       { text: "Cancel", style: "cancel" },
       {
-        text: "Delete", style: "destructive",
-        onPress: async () => {
-          try {
-            await API.delete(`/admin/users/${id}`, {
-              headers: { Authorization: `Bearer ${token}` }
-            });
-            fetchUsers();
-            fetchStats();
-          } catch (err) {
-            console.log(err);
-          }
-        }
-      }
+        text: "Delete",
+        style: "destructive",
+        onPress: performDelete,
+      },
     ]);
-  };
+  }
+};
+
+
+
+
+
+
 
   const deleteJob = async (id) => {
     Alert.alert("Delete Job", "Are you sure?", [
@@ -746,110 +803,7 @@ const addNote = async () => {
               </TouchableOpacity>
             </View>
           )}
-          {/* {activeTab === "add-note" && (
-  <View style={styles.card}>
-
-    <Text style={styles.cardHeading}>
-      Add PDF Note
-    </Text>
-
-    
-    <Text style={styles.fieldLabel}>Title *</Text>
-    <TextInput
-      placeholder="e.g. SSC Maths Notes"
-      placeholderTextColor={C.textLight}
-      style={styles.input}
-      value={noteTitle}
-      onChangeText={setNoteTitle}
-    />
-
-    
-    <Text style={styles.fieldLabel}>Category *</Text>
-    <TextInput
-      placeholder="e.g. SSC"
-      placeholderTextColor={C.textLight}
-      style={styles.input}
-      value={noteCategory}
-      onChangeText={setNoteCategory}
-    />
-
-    
-    <Text style={styles.fieldLabel}>Subject *</Text>
-    <TextInput
-      placeholder="e.g. Mathematics"
-      placeholderTextColor={C.textLight}
-      style={styles.input}
-      value={noteSubject}
-      onChangeText={setNoteSubject}
-    />
-
-   
-    <Text style={styles.fieldLabel}>Description</Text>
-    <TextInput
-      placeholder="Short note description"
-      placeholderTextColor={C.textLight}
-      style={[styles.input, styles.multilineInput]}
-      multiline
-      numberOfLines={3}
-      value={noteDescription}
-      onChangeText={setNoteDescription}
-    />
-
-    
-    <Text style={styles.fieldLabel}>PDF Link *</Text>
-    <TextInput
-      placeholder="https://drive.google.com/..."
-      placeholderTextColor={C.textLight}
-      style={styles.input}
-      value={notePdfUrl}
-      onChangeText={setNotePdfUrl}
-      autoCapitalize="none"
-    />
-
-    
-    <Text style={styles.fieldLabel}>Pages</Text>
-    <TextInput
-      placeholder="e.g. 120"
-      placeholderTextColor={C.textLight}
-      style={styles.input}
-      value={notePages}
-      onChangeText={setNotePages}
-      keyboardType="numeric"
-    />
-
-    
-    <Text style={styles.fieldLabel}>Language</Text>
-    <TextInput
-      placeholder="e.g. English"
-      placeholderTextColor={C.textLight}
-      style={styles.input}
-      value={noteLanguage}
-      onChangeText={setNoteLanguage}
-    />
-
-    <TouchableOpacity
-      style={styles.addBtn}
-      onPress={addNote}
-      disabled={addingNote}
-    >
-      {addingNote ? (
-        <ActivityIndicator color={C.white} />
-      ) : (
-        <>
-          <Ionicons
-            name="document-text-outline"
-            size={18}
-            color={C.white}
-          />
-          <Text style={styles.addBtnText}>
-            Add PDF Note
-          </Text>
-        </>
-      )}
-    </TouchableOpacity>
-
-  </View>
-)} */}
+         
           {activeTab === "add-note" && (
   <View style={styles.card}>
 

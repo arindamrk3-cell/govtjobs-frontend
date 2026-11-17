@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   View, Text, TouchableOpacity, StyleSheet,
-  ScrollView, SafeAreaView, ActivityIndicator, Alert
+  ScrollView, SafeAreaView, ActivityIndicator, Alert,Platform
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
@@ -197,19 +197,64 @@ export default function ProfileScreen({ token, setScreen }) {
     }
   };
 
-  const logout = async () => {
-    Alert.alert("Logout", "Are you sure you want to logout?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Logout", style: "destructive",
-        onPress: async () => {
-          await AsyncStorage.removeItem("token");
-          await AsyncStorage.removeItem("onboarded");
-          setScreen("login");
-        }
-      }
-    ]);
+  // const logout = async () => {
+  //   Alert.alert("Logout", "Are you sure you want to logout?", [
+  //     { text: "Cancel", style: "cancel" },
+  //     {
+  //       text: "Logout", style: "destructive",
+  //       onPress: async () => {
+  //         await AsyncStorage.removeItem("token");
+  //         await AsyncStorage.removeItem("onboarded");
+  //         setScreen("login");
+  //       }
+  //     }
+  //   ]);
+  // };
+
+const logout = async () => {
+  const performLogout = async () => {
+    try {
+      // Clear authentication and cached user data
+      await AsyncStorage.multiRemove([
+        "token",
+        "onboarded",
+        "cachedUser",
+        "profileStats",
+      ]);
+
+      // Return to login screen
+      setScreen("login");
+
+    } catch (error) {
+      console.error("Logout error:", error);
+      Alert.alert("Error", "Unable to logout. Please try again.");
+    }
   };
+
+  if (Platform.OS === "web") {
+    const confirmed = window.confirm(
+      "Are you sure you want to logout?"
+    );
+
+    if (confirmed) {
+      await performLogout();
+    }
+  } else {
+    Alert.alert(
+      "Logout",
+      "Are you sure you want to logout?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Logout",
+          style: "destructive",
+          onPress: performLogout,
+        },
+      ]
+    );
+  }
+};
+
 
   return (
     <SafeAreaView style={styles.container}>

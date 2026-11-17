@@ -34,7 +34,11 @@
           "icon": "./assets/icon.png",
           "color": "#0D1F1A"
         }
-      ]
+      ],
+      "expo-font",
+      "expo-image",
+      "expo-status-bar",
+      "expo-web-browser"
     ],
     "extra": {
       "eas": {
